@@ -13,6 +13,7 @@ const AccountSettings = () => {
     const [loading, setLoading] = useState(true);
     const [modalType, setModalType] = useState(null); // State to track which modal is open
     const [error, setError] = useState(null);
+    const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
     const { 
         register: registerUsername, 
         handleSubmit: handleSubmitUsername, 
@@ -40,20 +41,6 @@ const AccountSettings = () => {
             password: ""
         }
     });
-    
-    const{
-        register: registerPassword,
-        handleSubmit: handleSubmitPassword,
-        formState: { errors: passwordErrors, isSubmitting: isPasswordSubmitting },
-        watch: watchPassword,
-        setValue: setPasswordValue,
-        reset: resetPassword
-        } = useForm({
-            defaultValues: {
-                newPassword: "",
-                confirmPassword: ""
-            }
-        });
 
     const handleClose = () => {
         console.log('Modal closing, current type:', modalType);
@@ -132,6 +119,32 @@ const AccountSettings = () => {
         }
     };
 
+    const handlePasswordChange = async () => {
+        setIsPasswordSubmitting(true);
+        try{
+            const csrfResponse = await axios.get("/api/csrf/", {
+                withCredentials: true
+            });
+            const csrfToken = csrfResponse.data.csrfToken;
+            const response = await axios.post('/api/change-password-request/', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                withCredentials: true
+            });
+
+            if (response.data.success){
+                handleShow('password');
+            }
+        } catch(err) {
+            console.error('Password change initiation error:', err);
+            setError(err.response?.data?.error || 'Failed to initiate password change');
+        } finally{
+            setIsPasswordSubmitting(false);
+        }
+    }
+
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login');
@@ -172,8 +185,8 @@ const AccountSettings = () => {
             <p>Bio: {user.bio}</p>
             <p>Member since: {user.date_joined}</p>
 
-            <div className = "change_password" onClick={() => handleShow('password')}>
-                <button className="w-2xl bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200">Change Password</button>
+            <div className = "change_password" onClick={handlePasswordChange}>
+                <button className={`submit_button ${isPasswordSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>Change Password</button>
             </div>
 
             {/* Username Modal */}
@@ -255,38 +268,10 @@ const AccountSettings = () => {
             {/* Password Modal */}
             <Modal show={modalType === 'password'} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Change Password</Modal.Title>
+                    <Modal.Title>A verification message has been sent to you</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Enter your new username and existing password</p>
-                    {error && typeof error === 'string' && (
-                        <div className="error">
-                            {error}
-                        </div>
-                    )}
-                    <form onSubmit={handleSubmitPassword(onSubmit)}>
-                        <div className="input-container">
-                            <input
-                                type="password"
-                                placeholder="New Password"
-                                className="input-field" 
-                                {...registerPassword("newPassword", { required: "New password is required" })}
-                            />
-                            <input
-                                type="password"
-                                placeholder="Confrim Password"
-                                className="input-field"
-                                {...registerPassword("confirmPassword", { required: "Confirm password is required" })}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className={`submit_button ${isPasswordSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            disabled={isPasswordSubmitting}
-                        >
-                            Save Changes
-                        </button>
-                    </form>
+                    Please check your email to change your password
                 </Modal.Body>
             </Modal>
         </div>

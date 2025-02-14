@@ -110,3 +110,21 @@ class ChangeEmailSerializer(serializers.Serializer):
             errors['password'] = 'Incorrect password'
             raise serializers.ValidationError(errors)
         return data
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+    
+    def validate(self, data):
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+
+        errors = {}
+
+        if password1 != password2:
+            errors['password'] = 'Passwords do not match'
+            raise serializers.ValidationError(errors)
+        if not password1 or not password2:
+            errors['blank'] = 'Password field left blank'
+            raise serializers.ValidationError(errors)
+        return data

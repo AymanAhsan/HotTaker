@@ -33,6 +33,18 @@ class EmailService:
         
         self._send_email(subject, plain_message, user.pending_email, message)
         print(f"Verification email sent to {user.pending_email}")
+    
+    def send_password_reset_email(self, user):
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        reset_link = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}"
+        
+        subject = 'Reset your password'
+        message = render_to_string('accounts/reset_password.html', {'link': reset_link})
+        plain_message = strip_tags(message)
+        
+        self._send_email(subject, plain_message, user.email, message)
+        print(f"Password reset email sent to {user.email}")
 
     def _send_email(self, subject, plain_message, to_email, html_message=None):
         send_mail(

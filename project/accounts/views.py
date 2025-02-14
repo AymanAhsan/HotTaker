@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializer import AccountSerializer, SignUpSerializer, LoginSerializer, ChangeUsernameSerializer, ChangeEmailSerializer
+from .serializer import AccountSerializer, SignUpSerializer, LoginSerializer, ChangeUsernameSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .EmailService import EmailService
 from .Tokens import TokenVerificationMixin
 
@@ -125,3 +125,21 @@ class VerifyNewEmailView(APIView, TokenVerificationMixin):
         user.save()
         
         return Response({'success': True}, status=status.HTTP_200_OK)
+
+class SendPasswordEmailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user = request.user
+            email_service = EmailService()
+            email_service.send_password_reset_email(user)
+            return Response({'success': True, 'message': 'Password reset email sent'})
+        except Exception as e:
+            return Response(
+                {'error': 'Failed to send reset email'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+class VerifyPasswordResetView(APIView, TokenVerificationMixin):
+    pass
