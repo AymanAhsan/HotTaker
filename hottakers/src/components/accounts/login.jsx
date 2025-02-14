@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from './UserContext';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import '../../css/login.css';
 
 const Login = () => {
     const { setIsAuthenticated, setUser, isAuthenticated } = useUser();
@@ -61,13 +62,13 @@ const Login = () => {
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
                 {error && typeof error === 'string' && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                    <div className="error">
                         {error}
                     </div>
                 )}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex flex-col">
-                        <label htmlFor="email" className="text-gray-700 mb-1">Email</label>
+                        <label htmlFor="email" className=" text-gray-700 mb-1">Email</label>
                         <input
                             type="text"
                             id="email"
@@ -79,11 +80,11 @@ const Login = () => {
                                 }
                             })}
                             placeholder="Enter your email"
-                            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="input_field"
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="password" className="text-gray-700 mb-1">Password</label>
+                        <label htmlFor="password" className=" text-gray-700 mb-1">Password</label>
                         <input
                             type="password"
                             id="password"
@@ -95,7 +96,7 @@ const Login = () => {
                                 }
                             })}
                             placeholder="Enter your password"
-                            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="input_field"
                         />
                     </div>
                     <button

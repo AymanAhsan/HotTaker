@@ -155,11 +155,11 @@ const AccountSettings = () => {
             />
             <div className="username">
                 <p>Username: {user.username}</p>
-                <button className="bg-gray-500 text-white px-4 py-1 rounded-md hover:bg-gray-400 active:bg-gray-300 transition duration-200" onClick={() => handleShow('username')}>Edit</button>
+                <button className="edit_button" onClick={() => handleShow('username')}>Edit</button>
             </div>
             <div className="email">
                 <p>Email: {user.email}</p>
-                <button className="bg-gray-500 text-white px-4 py-1 rounded-md hover:bg-gray-400 active:bg-gray-300 transition duration-200" onClick={() => handleShow('email')}>Edit</button>
+                <button className="edit_button" onClick={() => handleShow('email')}>Edit</button>
             </div>
             {user.phone ? (
                 <>
@@ -184,7 +184,7 @@ const AccountSettings = () => {
                 <Modal.Body>
                     <p>Enter your new username and existing password</p>
                     {error && typeof error === 'string' && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                        <div className="error">
                             {error}
                         </div>
                     )}
@@ -193,19 +193,19 @@ const AccountSettings = () => {
                             <input
                                 type="text"
                                 placeholder="New Username"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input_field" 
                                 {...registerUsername("username", { required: "Username is required" })}
                             />
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input_field"
                                 {...registerUsername("password", { required: "Password is required" })}
                             />
                         </div>
                         <button
                             type="submit"
-                            className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200 ${isUsernameSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`submit_button ${isUsernameSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                             disabled={isUsernameSubmitting}
                         >
                             Save Changes
@@ -222,7 +222,7 @@ const AccountSettings = () => {
                 <Modal.Body>
                     <p>Enter new Email and password</p>
                     {error && typeof error === 'string' && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                        <div className="error">
                             {error}
                         </div>
                     )}
@@ -231,19 +231,19 @@ const AccountSettings = () => {
                             <input
                                 type="text"
                                 placeholder="New Email"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input_field" 
                                 {...registerEmail("email", { required: "Email is required" })}
                             />
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input_field" 
                                 {...registerEmail("password", { required: "Password is required" })}
                             />
                         </div>
                         <button
                             type="submit"
-                            className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200 ${isEmailSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`submit_button ${isEmailSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                             disabled={isEmailSubmitting}
                         >
                             Save Changes
@@ -260,7 +260,7 @@ const AccountSettings = () => {
                 <Modal.Body>
                     <p>Enter your new username and existing password</p>
                     {error && typeof error === 'string' && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                        <div className="error">
                             {error}
                         </div>
                     )}
@@ -269,19 +269,19 @@ const AccountSettings = () => {
                             <input
                                 type="password"
                                 placeholder="New Password"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input-field" 
                                 {...registerPassword("newPassword", { required: "New password is required" })}
                             />
                             <input
                                 type="password"
                                 placeholder="Confrim Password"
-                                className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                className="input-field"
                                 {...registerPassword("confirmPassword", { required: "Confirm password is required" })}
                             />
                         </div>
                         <button
                             type="submit"
-                            className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200 ${isPasswordSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`submit_button ${isPasswordSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                             disabled={isPasswordSubmitting}
                         >
                             Save Changes

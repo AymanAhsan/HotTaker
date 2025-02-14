@@ -22,3 +22,19 @@
 .input-container input {
     margin-bottom: 10px; /* Adjust the spacing as needed */
 }
+
+.input_field {
+    @apply border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400
+}
+
+.error{
+    @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4
+}
+
+.submit_button{
+    @apply w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200
+}
+
+.edit_button{
+    @apply bg-gray-500 text-white px-4 py-1 rounded-md hover:bg-gray-400 active:bg-gray-300 transition duration-200
+}
