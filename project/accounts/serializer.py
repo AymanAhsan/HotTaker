@@ -114,6 +114,8 @@ class ChangeEmailSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
     
     def validate(self, data):
         password1 = data.get('password1')

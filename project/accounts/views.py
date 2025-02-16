@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import Account
+from .models import Account
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
@@ -61,14 +61,14 @@ class VerifyEmailView(APIView, TokenVerificationMixin):
         result = self.verify_token(uidb64, token)
         if not result['success']:
             return Response({'error': result['error']}, status=status.HTTP_400_BAD_REQUEST)
-            
+
         user = result['user']
         if result['is_valid']:
             user.is_active = True
             user.save()
             return Response({'success': True})
         return Response({'error': 'Invalid verification link'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
 class LogoutView(APIView):
     permission_classes = [AllowAny]
     
@@ -111,10 +111,16 @@ class VerifyNewEmailView(APIView, TokenVerificationMixin):
     def get(self, request, uidb64, token):
         result = self.verify_token(uidb64, token)
         
-        if not result['success'] or not result['is_valid']:
+        if not result['success']:
             return Response(
-                {'error': 'Invalid verification link'}, 
+                {
+                    'error': result['error']
+                },
                 status=status.HTTP_400_BAD_REQUEST
+            )
+        if not result['is_valid']:
+            return Response(
+                {'error': 'The verification link has expired'},
             )
             
         user = result['user']
@@ -142,4 +148,48 @@ class SendPasswordEmailView(APIView):
             )
 
 class VerifyPasswordResetView(APIView, TokenVerificationMixin):
-    pass
+    print("verify password reset")
+    def get(self, request, uidb64, token):
+        result = self.verify_token(uidb64, token)
+
+        if not result['success']:
+            return Response(
+                {
+                    'error': result['error']
+                }, status=status.HTTP_400_BAD_REQUEST
+            )
+        if not result['is_valid']:
+            return Response(
+                {'error': 'The verification link has expired'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if result['is_valid']:
+            print("valid token")
+            return Response({'success': True})
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+    print("change password")
+
+    def get(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            verification_result = self.verify_token(validated_data['uidb64'], validated_data['token'])
+            if not verification_result['success']:
+                return Response({'error': verification_result['error']}, status=status.HTTP_400_BAD_REQUEST)
+            user = verification_result['user']
+            if not verification_result['is_valid']:
+                return Response({'error': 'The verification link has expired'}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user.set_password(validated_data['password'])
+                user.save()
+                return Response({
+                    'message': 'Password reset successfully'
+                }, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({'error': 'Failed to reset password'}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({'success': True})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

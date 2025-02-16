@@ -12,6 +12,7 @@ import User_Post from './components/post/user-post';
 import Logout from './components/accounts/logout';
 import UserNotFound from './components/accounts/user_not_found';
 import Settings from './components/accounts/settings';
+import ResetPassword from './components/accounts/settings/ResetPassword.jsx';
 import axios from 'axios';
 import { UserProvider } from './components/accounts/UserContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -53,6 +54,8 @@ function AppContent() {
           <Route path="/user-not-found" element={<UserNotFound />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
+          <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
+          <Route path="/reset-password/reset/" element={<ResetPassword />} />
         </Routes>
       </main>
       <Footer />
