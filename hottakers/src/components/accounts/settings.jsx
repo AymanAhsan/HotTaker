@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from './UserContext';
 import SettingsSidebar from '../utility/settings_sidebar';
 import AccountSettings from './settings/AccountSettings';
+import ProfileSettings from './settings/ProfileSettings';
 import '../../css/settings.css';
 import axios from 'axios';
 
@@ -15,7 +16,7 @@ const Settings = () => {
             case 'account':
                 return <AccountSettings />;
             case 'profile':
-                return <div>Profile Settings</div>;
+                return <ProfileSettings/>;
             case 'password':
                 return <div>Password Settings</div>;
             case 'notifications':

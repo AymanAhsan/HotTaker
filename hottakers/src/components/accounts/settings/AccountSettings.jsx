@@ -182,7 +182,6 @@ const AccountSettings = () => {
             ) : (
                 <p>Phone number not provided</p>
             )}
-            <p>Bio: {user.bio}</p>
             <p>Member since: {user.date_joined}</p>
 
             <div className = "change_password" onClick={handlePasswordChange}>

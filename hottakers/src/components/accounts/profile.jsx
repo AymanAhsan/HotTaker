@@ -50,7 +50,6 @@ const Profile = () => {
    if (loading) {
         return <div>Loading...</div>;
     }
-
     if (!profileState.userExists) {
         return <div>User not found</div>;
     }
