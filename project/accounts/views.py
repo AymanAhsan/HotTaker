@@ -172,24 +172,11 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
     print("change password")
 
-    def get(self, request):
+    def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
-            validated_data = serializer.validated_data
-            verification_result = self.verify_token(validated_data['uidb64'], validated_data['token'])
-            if not verification_result['success']:
-                return Response({'error': verification_result['error']}, status=status.HTTP_400_BAD_REQUEST)
-            user = verification_result['user']
-            if not verification_result['is_valid']:
-                return Response({'error': 'The verification link has expired'}, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                user.set_password(validated_data['password'])
-                user.save()
-                return Response({
-                    'message': 'Password reset successfully'
-                }, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({'error': 'Failed to reset password'}, status=status.HTTP_400_BAD_REQUEST)
-
+            user = request.user
+            user.set_password(serializer.validated_data['password1'])
+            user.save()
             return Response({'success': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

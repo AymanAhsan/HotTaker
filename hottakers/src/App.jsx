@@ -38,7 +38,8 @@ function AppContent() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {location.pathname !== '/settings' && <Header />}
+      {(location.pathname !== '/settings' &&
+          !location.pathname.startsWith('/reset-password/')) && <Header />}
       <main className="flex-grow">
         <Routes>
           <Route path="/feed" element={<Feed />} />
@@ -55,7 +56,6 @@ function AppContent() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
           <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-          <Route path="/reset-password/reset/" element={<ResetPassword />} />
         </Routes>
       </main>
       <Footer />
