@@ -188,6 +188,10 @@ const AccountSettings = () => {
                 <button className={`submit_button ${isPasswordSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>Change Password</button>
             </div>
 
+            <div className="delete-account">
+                <button className="delete-account-button">Delete Account</button>
+            </div>
+
             {/* Username Modal */}
             <Modal show={modalType === 'username'} onHide={handleClose}>
                 <Modal.Header closeButton>

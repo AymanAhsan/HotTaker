@@ -8,6 +8,26 @@ import axios from 'axios';
 const ProfileSettings = () => {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useUser();
+    const [bioState, setBioState] = useState(false)
+    const [bioInput, setBioInput] = useState("");
+
+    const [statusState, setStatusState] = useState(false)
+    const [statusInput, setStatusInput] = useState("");
+
+    const enableBioEdit = () => setBioState(true);
+    const saveBio = () => {
+        setBioState(false); // Disable editing
+        console.log("New Bio:", bioInput); // Save or send the bio (e.g., API call)
+     };
+
+    const enableStatusEdit = () => setStatusState(true);
+    const saveStatus = () => {
+        setStatusState(false);
+        console.log("New Status:", statusInput);
+    }
+
+
+    // Have a seperate state after pressing edit
 
     return (
         <div>
@@ -20,16 +40,40 @@ const ProfileSettings = () => {
                 <div className="username">
                     <p>Username: {user.username}</p>
                 </div>
-                {user.bio ? (
-                    <>
-                    <p>{user.bio}</p>
-                    <button className="ml-10">Edit</button>
-                    </>
-                    ):(
-                        <input></input>
-                    )}
+                <div className="bio">
+                    <input
+                        placeholder="Enter your bio"
+                        value={bioInput}
+                        disabled={!bioState} // Field is only enabled in edit mode
+                        onChange={(e) => setBioInput(e.target.value)} // Update input value
+                      />
+                      {bioState ? (
+                        <button className="ml-10" onClick={saveBio}>
+                          Save
+                        </button>
+                      ) : (
+                        <button className="ml-10" onClick={enableBioEdit}>
+                          Edit
+                        </button>
+                      )}
+
+                </div>
                 <div className='status'>
-                    <p>{user.status}</p>
+                     <input
+                        placeholder="Enter your Status"
+                        value={statusInput}
+                        disabled={!statusState} // Field is only enabled in edit mode
+                        onChange={(e) => setStatusInput(e.target.value)} // Update input value
+                      />
+                    {statusState ? (
+                        <button className="ml-10" onClick={saveStatus}>
+                          Save
+                        </button>
+                      ) : (
+                        <button className="ml-10" onClick={enableStatusEdit}>
+                          Edit
+                        </button>
+                      )}
                 </div>
         </div>
     )
