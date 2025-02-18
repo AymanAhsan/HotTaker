@@ -4,11 +4,13 @@ import { useUser } from './UserContext';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import '../../css/login.css';
+import Modal from "react-bootstrap/Modal";
 
 const Login = () => {
     const { setIsAuthenticated, setUser, isAuthenticated } = useUser();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [modalType, setModalType] = useState(null);
     const { 
         register, 
         handleSubmit, 
@@ -22,6 +24,17 @@ const Login = () => {
         }
     });
 
+    const {
+        register: forgetPassword,
+        handleSubmit: handleForgetPasswordSubmit,
+    } = useForm(
+        {
+            defaultValues: {
+                email: ""
+            }
+        }
+    );
+
   // Check authentication
     useEffect(() => {
         if (isAuthenticated) {
@@ -29,6 +42,14 @@ const Login = () => {
         }
     }, [isAuthenticated, navigate]);
 
+    const handleShow = (type) => {
+        console.log('Opening modal for:', type);
+        setModalType(type);
+    }
+
+    const handleClose = () => {
+        setModalType(null);
+    }
 
     const onSubmit = async (data) => {
         try {
@@ -56,6 +77,12 @@ const Login = () => {
             setError(errorMessages[0]);
         }
     };
+
+    const handleForgetPassword = async (data) => {
+        console.log("=== Form Submission Started ===");
+        console.log("Form Data:", data);
+        console.log("=== Form Submission Finished ===");
+    }
 
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -99,6 +126,9 @@ const Login = () => {
                             className="input_field"
                         />
                     </div>
+                    <div>
+                        <button className="text-blue-500 hover:underline" onClick={() => handleShow("forget-password")}>Forgot password?</button>
+                    </div>
                     <button
                         type="submit" 
                         className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -108,6 +138,23 @@ const Login = () => {
                     </button>
                 </form>
             </div>
+            <Modal show={modalType === 'forget-password'} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Forgot your password?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Please type in your account email</p>
+                    <form onSubmit={handleForgetPasswordSubmit(handleForgetPassword)} className="space-y-4">
+                        <input
+                            className ="input_field w-full mb-4"
+                            type="text"
+                            name = "email"
+                            placeholder="Email"
+                        {...forgetPassword("email", { required: "Email is required" })}/>
+                        <button className='w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200'>Send</button>
+                    </form>
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

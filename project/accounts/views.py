@@ -180,3 +180,5 @@ class ChangePasswordView(APIView):
             user.save()
             return Response({'success': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# TODO: Make views for forgetting passwords type shi
