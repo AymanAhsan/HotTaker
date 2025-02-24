@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import SignUpView, LoginView, VerifyEmailView, LogoutView, ChangeUsernameView, VerifyNewEmailView, ChangeEmailView, SendPasswordEmailView, VerifyPasswordResetView, ChangePasswordView
+from .views import SignUpView, LoginView, VerifyEmailView, LogoutView, ChangeUsernameView, VerifyNewEmailView, ChangeEmailView, SendPasswordEmailView, VerifyPasswordResetView, ChangePasswordView, ForgetPasswordView
 
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('change-password-request/', SendPasswordEmailView.as_view(), name='password-reset-request'),
     path('reset-password/<str:uidb64>/<str:token>/', VerifyPasswordResetView.as_view(), name='verify-password-reset'),
     path('reset-password/reset/', ChangePasswordView.as_view(), name='password-reset'),
+    path('forget-password/', ForgetPasswordView.as_view(), name='forget-password'),
 ]

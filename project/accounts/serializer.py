@@ -128,3 +128,17 @@ class ChangePasswordSerializer(serializers.Serializer):
             errors['blank'] = 'Password field left blank'
             raise serializers.ValidationError(errors)
         return data
+
+class ForgetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate(self, data):
+        email = data.get('email')
+        errors = {}
+        if not email:
+            errors['blank'] = 'Email field left blank'
+            raise serializers.ValidationError(errors)
+        if not Account.objects.filter(email=email).exists():
+            errors['email'] = 'Email does not exist'
+            raise serializers.ValidationError(errors)
+        return data

@@ -60,9 +60,9 @@ const Signup = () => {
         <div className="bg-gray-100 min-h-screen flex items-center justify-center">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
-                {error && typeof error === 'string' && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                        {error}
+                {(error || errors.email || errors.password) && (
+                    <div className="error">
+                        {error || errors.email?.message || errors.password?.message}
                     </div>
                 )}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
