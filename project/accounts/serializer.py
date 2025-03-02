@@ -142,3 +142,18 @@ class ForgetPasswordSerializer(serializers.Serializer):
             errors['email'] = 'Email does not exist'
             raise serializers.ValidationError(errors)
         return data
+
+class DeleteAccountSerializer(serializers.Serializer):
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        password = attrs.get('password')
+        errors = {}
+        if not password:
+            errors['blank'] = 'Password field left blank'
+            raise serializers.ValidationError(errors)
+        if not user.check_password(password):
+            errors['password'] = 'Incorrect password'
+            raise serializers.ValidationError(errors)
+        return attrs

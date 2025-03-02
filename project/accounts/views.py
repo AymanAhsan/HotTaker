@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializer import AccountSerializer, SignUpSerializer, LoginSerializer, ChangeUsernameSerializer, ChangeEmailSerializer, ChangePasswordSerializer, ForgetPasswordSerializer
+from .serializer import AccountSerializer, SignUpSerializer, LoginSerializer, ChangeUsernameSerializer, ChangeEmailSerializer, ChangePasswordSerializer, ForgetPasswordSerializer, DeleteAccountSerializer
 from .EmailService import EmailService
 from .Tokens import TokenVerificationMixin
 
@@ -181,7 +181,6 @@ class ChangePasswordView(APIView):
             return Response({'success': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# TODO: Make views for forgetting passwords type shi
 class ForgetPasswordView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -191,5 +190,17 @@ class ForgetPasswordView(APIView):
             user = Account.objects.get(email=email)
             email_service = EmailService()
             email_service.send_password_reset_email(user)
+            return Response({'success': True})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = DeleteAccountSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = request.user
+            print("user deleted")
+            user.delete()
             return Response({'success': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -42,6 +42,18 @@ const AccountSettings = () => {
         }
     });
 
+    const {
+    register: registerDelete,
+    handleSubmit: handleSubmitDelete,
+    formState: { errors: deleteErrors, isSubmitting: isDeleteSubmitting },
+    reset: resetDelete
+} = useForm({
+    defaultValues: {
+        password: ""
+    }
+});
+
+
     const handleClose = () => {
         console.log('Modal closing, current type:', modalType);
         setModalType(null);
@@ -79,6 +91,9 @@ const AccountSettings = () => {
                     break;
                 case 'phone':
                     endpoint = '/api/change-phone/';
+                    break;
+                case 'delete':
+                    endpoint = '/api/delete-account/';
                     break;
                 default:
                     console.log('Invalid modal type');
@@ -145,6 +160,7 @@ const AccountSettings = () => {
         }
     }
 
+
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login');
@@ -189,7 +205,8 @@ const AccountSettings = () => {
             </div>
 
             <div className="delete-account">
-                <button className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200">
+                <button className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200"
+                onClick={() => handleShow('delete')}>
                     Delete Account</button>
             </div>
 
@@ -276,6 +293,53 @@ const AccountSettings = () => {
                 </Modal.Header>
                 <Modal.Body>
                     Please check your email to change your password
+                </Modal.Body>
+            </Modal>
+
+            {/* Delete Account Modal */}
+            <Modal show={modalType === 'delete'} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Enter your password to confirm account deletion
+                    {error && typeof error === 'string' && (
+                        <div className="error">
+                            {error}
+                        </div>
+                    )}
+                    <form onSubmit={handleSubmitDelete(onSubmit)}>
+                        <div className="mb-3">
+                            <input
+                                type="password"
+                                className={`form-control ${deleteErrors.password ? 'is-invalid' : ''}`}
+                                {...registerDelete('password', {
+                                    required: 'Password is required'
+                                })}
+                            />
+                            {deleteErrors.password && (
+                                <div className="invalid-feedback">
+                                    {deleteErrors.password.message}
+                                </div>
+                            )}
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <button
+                                type="button"
+                                className="btn btn-secondary me-2"
+                                onClick={handleClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn btn-danger"
+                                disabled={isDeleteSubmitting}
+                            >
+                                {isDeleteSubmitting ? 'Deleting...' : 'Delete Account'}
+                            </button>
+                        </div>
+                    </form>
                 </Modal.Body>
             </Modal>
         </div>
