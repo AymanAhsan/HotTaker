@@ -32,7 +32,7 @@ const ProfileSettings = () => {
 
     // TODO: add status and bio to the db
     // TODO: display them on the profile page
-    // real slow progress i hate college
+    // real slow progress i hate college ts pmo
     return (
         <div>
             <div>Profile Settings</div>
