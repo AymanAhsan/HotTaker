@@ -10,9 +10,12 @@ const ProfileSettings = () => {
     const { user, isAuthenticated } = useUser();
     const [bioState, setBioState] = useState(false)
     const [bioInput, setBioInput] = useState("");
+    const [bioCharCount, setBioCharCount] = useState(0);
+    const [statusCharCount, setStatusCharCount] = useState(0);
 
     const [statusState, setStatusState] = useState(false)
     const [statusInput, setStatusInput] = useState("");
+    const maxLength = 140;
 
     const enableBioEdit = () => setBioState(true);
     const saveBio = () => {
@@ -27,8 +30,9 @@ const ProfileSettings = () => {
     }
 
 
-    // Have a seperate state after pressing edit
-
+    // TODO: add status and bio to the db
+    // TODO: display them on the profile page
+    // real slow progress i hate college
     return (
         <div>
             <div>Profile Settings</div>
@@ -41,11 +45,23 @@ const ProfileSettings = () => {
                     <p>Username: {user.username}</p>
                 </div>
                 <div className="bio">
+                    <div className="flex items-center">
                     <input
                         placeholder="Enter your bio"
                         value={bioInput}
                         disabled={!bioState} // Field is only enabled in edit mode
-                        onChange={(e) => setBioInput(e.target.value)} // Update input value
+                        maxLength={maxLength}
+                        onChange={
+                            (e) => {
+                                const value = e.target.value;
+                                if (value.length <= maxLength) {
+                                    setBioInput(value);
+                                    setBioCharCount(value.length);
+                                }
+
+                            }
+
+                        } // Update input value
                       />
                       {bioState ? (
                         <button className="ml-10" onClick={saveBio}>
@@ -56,14 +72,23 @@ const ProfileSettings = () => {
                           Edit
                         </button>
                       )}
-
+                        </div>
+                    <p className="text-sm text-gray-500 mt-1">{maxLength - bioCharCount}</p>
                 </div>
                 <div className='status'>
+                    <div className="flex items-center">
                      <input
                         placeholder="Enter your Status"
                         value={statusInput}
                         disabled={!statusState} // Field is only enabled in edit mode
-                        onChange={(e) => setStatusInput(e.target.value)} // Update input value
+                        onChange={(e) => {
+                                const value = e.target.value;
+                                if (value.length <= maxLength) {
+                                    setStatusInput(value);
+                                    setStatusCharCount(value.length);
+                                }
+
+                            }}
                       />
                     {statusState ? (
                         <button className="ml-10" onClick={saveStatus}>
@@ -74,6 +99,8 @@ const ProfileSettings = () => {
                           Edit
                         </button>
                       )}
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">{maxLength - statusCharCount}</p>
                 </div>
         </div>
     )

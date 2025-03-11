@@ -161,7 +161,9 @@ const Login = () => {
                         />
                     </div>
                     <div>
-                        <button className="text-blue-500 hover:underline" onClick={(e) => {
+                        <button className="text-blue-500 hover:underline"
+                                type="button"
+                                onClick={(e) => {
                             e.preventDefault();
                             handleShow("forget-password")
                         }}>Forgot password?</button>
