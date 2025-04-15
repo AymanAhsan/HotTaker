@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import SignUpView, LoginView, VerifyEmailView, LogoutView, ChangeUsernameView, VerifyNewEmailView, \
-    ChangeEmailView, SendPasswordEmailView, VerifyPasswordResetView, ChangePasswordView, ForgetPasswordView, \
-    DeleteAccountView
+from .views import *
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
@@ -17,4 +15,7 @@ urlpatterns = [
     path('reset-password/reset/', ChangePasswordView.as_view(), name='password-reset'),
     path('forget-password/', ForgetPasswordView.as_view(), name='forget-password'),
     path('delete-account/', DeleteAccountView.as_view(), name='delete-account'),
+    path('change-status/', ChangeStatusView.as_view(), name='change-status'),
+    path('change-bio/', ChangeBioView.as_view(), name='change-bio'),
+    path('admin/', admin.site.urls),
 ]

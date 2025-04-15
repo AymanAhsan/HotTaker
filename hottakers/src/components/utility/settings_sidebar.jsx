@@ -12,12 +12,10 @@ import axios from 'axios';
 const sections = [
     'account',
     'profile',
-    'password',
     'notifications',
     'privacy',
     'security',
     'apps',
-    'deactivate'
 ];
 
 const SettingsSidebar = ({setActiveSection}) => {

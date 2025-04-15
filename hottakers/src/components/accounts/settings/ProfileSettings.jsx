@@ -18,23 +18,77 @@ const ProfileSettings = () => {
     const maxLength = 140;
 
     const enableBioEdit = () => setBioState(true);
-    const saveBio = () => {
+    const saveBio = async () => {
         setBioState(false); // Disable editing
         console.log("New Bio:", bioInput); // Save or send the bio (e.g., API call)
+        await changeBio(bioInput);
      };
 
     const enableStatusEdit = () => setStatusState(true);
-    const saveStatus = () => {
+    const saveStatus = async () => {
         setStatusState(false);
         console.log("New Status:", statusInput);
+        await changeStatus(statusInput);
+    };
+
+    const changeBio = async () => {
+        try {
+            const csrfResponse = await axios.get("/api/csrf/", {
+                withCredentials: true
+            });
+            const csrfToken = csrfResponse.data.csrfToken;
+
+            const response = await axios.post('http://localhost:8000/api/change-bio/', {
+                bio: bioInput
+            }, {
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true // Include credentials in the request
+            })
+            console.log(response.data);
+            if (response.data.success) {
+                console.log('Bio updated successfully');
+                // setBioInput(response.data.bio);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const changeStatus = async () => {
+        try {
+            const csrfResponse = await axios.get("/api/csrf/", {
+                withCredentials: true
+            });
+            const csrfToken = csrfResponse.data.csrfToken;
+
+            const response = await axios.post('http://localhost:8000/api/change-status/', {
+                status: statusInput
+            }, {
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true // Include credentials in the request
+            })
+            console.log(response.data);
+            if (response.data.success) {
+                console.log('Status updated successfully');
+                // setStatusInput(response.data.status);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
-    // TODO: add status and bio to the db
     // TODO: display them on the profile page
     // real slow progress i hate college ts pmo
+    // Future improvements: Turn the change profile/bio into a modal
     return (
-        <div>
+    <div>
             <div>Profile Settings</div>
             <img
                     src={`http://localhost:8000${user?.pfp}`}

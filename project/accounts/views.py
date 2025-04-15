@@ -1,18 +1,10 @@
-from django.shortcuts import render, redirect
-from .models import Account
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils import timezone
-from django.conf import settings
-from .backend import EmailBackend
-from django.contrib.auth import login as auth_login, logout  
+from django.contrib.auth import login as auth_login, logout
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializer import AccountSerializer, SignUpSerializer, LoginSerializer, ChangeUsernameSerializer, ChangeEmailSerializer, ChangePasswordSerializer, ForgetPasswordSerializer, DeleteAccountSerializer
+from .serializer import *
 from .EmailService import EmailService
 from .Tokens import TokenVerificationMixin
 
@@ -203,4 +195,28 @@ class DeleteAccountView(APIView):
             print("user deleted")
             user.delete()
             return Response({'success': True})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangeStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangeStatusSerializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            user.status = serializer.validated_data['status']
+            user.save()
+            return Response(AccountSerializer(user).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangeBioView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangeBioSerializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            user.bio = serializer.validated_data['bio']
+            user.save()
+            return Response(AccountSerializer(user).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

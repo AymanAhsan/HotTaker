@@ -72,7 +72,6 @@ class LoginSerializer(serializers.Serializer):
 class ChangeUsernameSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
@@ -157,3 +156,25 @@ class DeleteAccountSerializer(serializers.Serializer):
             errors['password'] = 'Incorrect password'
             raise serializers.ValidationError(errors)
         return attrs
+
+class ChangeStatusSerializer(serializers.Serializer):
+    status = serializers.CharField()
+
+    def validate(self, data):
+        status = data.get('status')
+        errors = {}
+        if not status:
+            errors['blank'] = 'Status field left blank'
+            raise serializers.ValidationError(errors)
+        return data
+
+class ChangeBioSerializer(serializers.Serializer):
+    bio = serializers.CharField()
+
+    def validate(self, data):
+        bio = data.get('bio')
+        errors = {}
+        if not bio:
+            errors['blank'] = 'Bio field left blank'
+            raise serializers.ValidationError(errors)
+        return data
