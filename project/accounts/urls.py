@@ -17,5 +17,6 @@ urlpatterns = [
     path('delete-account/', DeleteAccountView.as_view(), name='delete-account'),
     path('change-status/', ChangeStatusView.as_view(), name='change-status'),
     path('change-bio/', ChangeBioView.as_view(), name='change-bio'),
+    path('change-pronouns/', ChangePronounsView.as_view(), name='change-pronouns'),
     path('admin/', admin.site.urls),
 ]

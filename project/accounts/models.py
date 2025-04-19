@@ -27,6 +27,7 @@ class Account(AbstractBaseUser):
     pfp = models.ImageField(upload_to='images/', default='images/default.jpg')
     status = models.CharField(max_length=50, default='')
     bio = models.TextField(max_length=500, default='')
+    pronouns = models.CharField(max_length=50, default='')
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     phone = models.CharField(max_length=15, default='')
@@ -45,3 +46,4 @@ class Account(AbstractBaseUser):
 
     def __str__(self):
         return self.username
+

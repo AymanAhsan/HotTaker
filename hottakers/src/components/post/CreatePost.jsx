@@ -42,8 +42,6 @@ const CreatePost = () => {
 
   const onSubmit = async (data) => {
     try {
-      //TODO: Test out changing Permission_classes in Views to see if it works
-      // Then add a CSRF token 
       const csrfResponse = await axios.get("/api/csrf/", {
         withCredentials: true
       });

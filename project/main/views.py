@@ -26,6 +26,7 @@ def check_auth(request):
                 'pfp': request.user.pfp.url,
                 'status': getattr(request.user, 'status', None),
                 'bio': getattr(request.user, 'bio', ''),
+                'pronouns': getattr(request.user, 'pronouns', ''),
 
             }
         })

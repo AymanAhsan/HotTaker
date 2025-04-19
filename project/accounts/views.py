@@ -1,5 +1,7 @@
 from django.contrib.auth import login as auth_login, logout
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -220,3 +222,27 @@ class ChangeBioView(APIView):
             user.save()
             return Response(AccountSerializer(user).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChangePronounsView(APIView):
+    permission_classes = [IsAuthenticated]
+    print("dfkljgdfkjfdfdl;dfj")
+
+    def dispatch(self, request, *args, **kwargs):
+        print("Dispatch called on ChangePronounsView")
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def post(self, request):
+        print("changing pronouns")
+        print("Request user:", request.user)
+        print("Is authenticated:", request.user.is_authenticated)
+        print("Request data:", request.data)
+        pronouns = request.data.get('pronouns', '')
+        if pronouns:
+            print("pronouns are: ", pronouns)
+            user = request.user
+            user.pronouns = pronouns
+            user.save()
+            return Response({'success': True})
+        return Response({'error': 'Pronouns are required'}, status=status.HTTP_400_BAD_REQUEST)

@@ -51,7 +51,7 @@ function AppContent() {
           <Route path="/verification-failed" element={<VerificationFailed />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/posts/:postId" element={<User_Post />} />
-          <Route path="/:username" element={<Profile />} />
+          <Route path="/user/:username" element={<Profile />} />
           <Route path="/user-not-found" element={<UserNotFound />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
